@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Cell SIT-H | Bootstrap Version</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --brand-cyan: #22d3ee;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e5e7eb;
+            position: relative; /* Required for Bootstrap Scrollspy */
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+        }
+        .navbar {
+            background-color: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        /* Style for the active nav link, driven by Scrollspy */
+        .navbar-nav .nav-link.active {
+            color: var(--brand-cyan) !important;
+            font-weight: 700;
+        }
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .content-section {
+            padding: 6rem 0;
+            overflow: hidden; /* Prevents content from showing before animation */
+        }
+        .bg-dark-card {
+            background-color: var(--dark-card);
+        }
+        .text-brand-cyan {
+            color: var(--brand-cyan);
+        }
+        .btn-brand {
+            background-color: var(--brand-cyan);
+            color: var(--dark-bg);
+            font-weight: 600;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-brand:hover {
+            background-color: #67e8f9;
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+        }
+        .team-img {
+            width: 128px;
+            height: 128px;
+            border: 2px solid var(--brand-cyan);
+            object-fit: cover;
+        }
+        .social-icon svg {
+            width: 24px;
+            height: 24px;
+            transition: color 0.3s ease;
+        }
+        .social-icon:hover svg {
+            color: var(--brand-cyan);
+        }
+        .contact-img {
+            width: 150px;
+            height: 150px;
+            border: 3px solid var(--brand-cyan);
+            object-fit: cover;
+        }
+
+        /* Styles for on-scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="100">
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" id="navbarNav">
+        <div class="container">
+            <a class="navbar-brand fs-4 fw-bold" href="#home">E-Cell <span class="text-brand-cyan">SIT-H</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main-nav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#vision">Vision</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#get-involved">Initiatives</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item ms-md-3"><a class="btn btn-brand rounded-pill px-4" href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- This canvas is for the 3D background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section text-center text-white">
+            <div class="container">
+                <h1 class="display-4 fw-bold mb-3 animate-on-scroll">IGNITING IDEAS. BUILDING FUTURES.</h1>
+                <p class="lead mb-4 col-md-8 mx-auto animate-on-scroll" style="transition-delay: 100ms;">Empowering the Next Generation of Innovators & Entrepreneurs at SIT Hyderabad.</p>
+                <a href="#vision" class="btn btn-brand btn-lg rounded-pill px-5 py-3 animate-on-scroll" style="transition-delay: 200ms;">Explore Our Vision</a>
+            </div>
+        </section>
+
+        <!-- Vision & Mission Section -->
+        <section id="vision" class="content-section bg-dark-card">
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                    <div class="col-md-6 animate-on-scroll">
+                        <h2 class="display-5 fw-bold text-brand-cyan mb-3">Our Vision</h2>
+                        <p class="fs-5">To create a vibrant and inclusive entrepreneurial ecosystem at SIT Hyderabad that nurtures innovation, enables start-ups, and empowers students, faculty, and alumni to become visionary entrepreneurs and change makers.</p>
+                    </div>
+                    <div class="col-md-6 animate-on-scroll" style="transition-delay: 100ms;">
+                        <h2 class="display-5 fw-bold text-brand-cyan mb-3">Our Mission</h2>
+                        <p class="fs-5">To inspire and support entrepreneurial aspirations, institutionalize innovation as a core value, enable incubation and funding for impactful startups, and foster interdisciplinary and global collaboration.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Initiatives Section -->
+        <section id="get-involved" class="content-section">
+            <div class="container">
+                <div class="text-center mb-5 animate-on-scroll">
+                    <h2 class="display-5 fw-bold text-white">Our Initiatives</h2>
+                    <p class="lead text-secondary mt-3">We offer a structured series of initiatives to guide you on your entrepreneurial journey.</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4 animate-on-scroll"><div class="p-4 rounded-3 bg-dark-card h-100"><h3 class="fw-bold text-brand-cyan mb-2">Orientation & Motivation</h3><p>Inspiring the entrepreneurial mindset.</p></div></div>
+                    <div class="col-md-6 col-lg-4 animate-on-scroll" style="transition-delay: 100ms;"><div class="p-4 rounded-3 bg-dark-card h-100"><h3 class="fw-bold text-brand-cyan mb-2">Business Planning Workshops</h3><p>Hands-on training in crafting viable business plans.</p></div></div>
+                    <div class="col-md-6 col-lg-4 animate-on-scroll" style="transition-delay: 200ms;"><div class="p-4 rounded-3 bg-dark-card h-100"><h3 class="fw-bold text-brand-cyan mb-2">Prototype to Commercialization</h3><p>Guiding you in preparing for market entry.</p></div></div>
+                    <div class="col-md-6 col-lg-4 animate-on-scroll"><div class="p-4 rounded-3 bg-dark-card h-100"><h3 class="fw-bold text-brand-cyan mb-2">Investor Engagement</h3><p>Creating opportunities to connect and pitch.</p></div></div>
+                    <div class="col-md-6 col-lg-4 animate-on-scroll" style="transition-delay: 100ms;"><div class="p-4 rounded-3 bg-dark-card h-100"><h3 class="fw-bold text-brand-cyan mb-2">Team Building</h3><p>Developing essential leadership and collaboration skills.</p></div></div>
+                    <div class="col-md-6 col-lg-4 animate-on-scroll" style="transition-delay: 200ms;"><div class="p-4 rounded-3 bg-dark-card h-100"><h3 class="fw-bold text-brand-cyan mb-2">Entrepreneurial Finance</h3><p>Insights into managing finances and securing funding.</p></div></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Team Section -->
+        <section id="team" class="content-section bg-dark-card">
+            <div class="container">
+                 <div class="text-center mb-5 animate-on-scroll">
+                    <h2 class="display-5 fw-bold text-white">Leadership & Mentors</h2>
+                    <p class="lead text-secondary mt-3">Our E-Cell is guided by a dedicated team of internal leaders and supported by distinguished external experts.</p>
+                </div>
+                <h3 class="fs-2 fw-bold text-brand-cyan text-center mb-5 animate-on-scroll">Internal Leadership</h3>
+                <div id="internal-team-container" class="row g-4 justify-content-center mb-5">
+                    <!-- JS will populate this -->
+                </div>
+                 <h3 class="fs-2 fw-bold text-brand-cyan text-center mb-5 animate-on-scroll">External Advisors & Mentors</h3>
+                <div id="external-team-container" class="row g-4 justify-content-center">
+                    <!-- JS will populate this -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="content-section">
+            <div class="container text-center">
+                <h2 class="display-5 fw-bold text-white animate-on-scroll">Ready to Build the Future?</h2>
+                <p class="lead text-secondary mt-3 col-lg-8 mx-auto animate-on-scroll" style="transition-delay: 100ms;">Connect with us to start your entrepreneurial journey, offer mentorship, or explore partnership opportunities.</p>
+                <div class="mt-5 animate-on-scroll" style="transition-delay: 200ms;">
+                   <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                            <img src="https://placehold.co/300x300/1e293b/FFFFFF?text=SPM" alt="Mr. Sai Prashanth Mallellu" class="contact-img rounded-circle mx-auto">
+                        </div>
+                        <div class="col-lg-5 col-md-6 text-center text-md-start fs-5">
+                            <p class="fw-bold text-white mb-1">Mr. Sai Prashanth Mallellu</p>
+                            <p class="text-secondary">Head, Entrepreneurship and Start-up Cell (E-Cell)</p>
+                            <a href="mailto:placements@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none">placements@sithyd.siu.edu.in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 border-top border-secondary bg-dark-card">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-center text-md-start mb-4 mb-md-0">
+                    <p class="text-secondary mb-1">Symbiosis Institute of Technology, Hyderabad</p>
+                    <p class="text-secondary small">Survey Number 292, Off Bangalore Highway, Rangareddy Dist, Hyderabad, Telangana - 509217</p>
+                    <p class="mt-3 text-secondary small">&copy; 2025 E-Cell, SIT Hyderabad. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <h5 class="fw-bold text-white">Mr. Vinay Chakravarthy Addanki</h5>
+                    <p class="text-secondary mb-1">President, E-Cell</p>
+                    <a href="mailto:vinay.addanki@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none small">vinay.addanki@sithyd.siu.edu.in</a>
+                    <div class="d-flex justify-content-center justify-content-md-end mt-3">
+                        <a href="#" class="text-secondary social-icon me-3">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                        </a>
+                        <a href="#" class="text-secondary social-icon me-3">
+                           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878V14.89H8.078v-2.89h2.36V9.601c0-2.328 1.383-3.625 3.518-3.625 1.006 0 1.87.074 2.122.107v2.583h-1.52c-1.13 0-1.35.536-1.35 1.322v1.75h2.867l-.374 2.89H15.11v7.008C19.343 21.128 22 16.991 22 12z"></path></svg>
+                        </a>
+                        <a href="#" class="text-secondary social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zM12 16c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm4.438-7.849c-.495 0-.896.401-.896.896s.401.896.896.896.896-.401.896-.896-.401-.896-.896-.896z"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // --- DATA ---
+        const internalTeam=[{name:"Dr. Rajanikanth Aluvalu",position:"Director & Chair Person"},{name:"Mr. Sai Prashanth",position:"Head, E-Cell & Convenor"},{name:"Dr. Amulya Prasad Panda",position:"Head, IIC & Co-Convenor"},{name:"Dr. Dhruba Jyothi Bora",position:"Faculty Coordinator"},{name:"Mr. D. Anand Kumar",position:"Coordinator"},{name:"Mr. Vinay Chakravarthy Addanki",position:"President, E-Cell"},{name:"Mr. Sujay Indupuru",position:"Vice President, E-Cell"},{name:"Mr. P Karthik",position:"Logistics & Partnership Head"},{name:"Mr. Gunda Ravi Partha Sarathi",position:"Student Engagement Coordinator"},{name:"Ms. Pendlimadugu Nikitha",position:"Student Engagement Coordinator"}];
+        const externalTeam=[{name:"Dr. Sriram Birudavolu",position:"External Invite & Advisor"},{name:"Mr. Bhanu Prakash Reddy Varla",position:"External Invite & Business Mentor"},{name:"Mr. Vidyasagar Tejomurtula",position:"External Invite & Technology Mentor"},{name:"Mr. Pranay Kumar Nalla",position:"External Invite & Advisor"},{name:"Mr. Vamsi Krishna Jadala",position:"External Invite & Business Mentor"},{name:"Ms. Shravya Mandadi",position:"External Invite & Women Entrepreneur"}];
+
+        // --- SCRIPTING ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const internalContainer=document.querySelector('#internal-team-container');
+            const externalContainer=document.querySelector('#external-team-container');
+
+            // Populate internal team members
+            if(internalContainer){
+                internalTeam.forEach((member, index)=>{
+                    const memberHtml = `
+                        <div class="col-6 col-md-4 col-lg-2 text-center animate-on-scroll" style="transition-delay: ${index * 50}ms">
+                            <img src="https://placehold.co/400x400/1e293b/FFFFFF?text=${member.name.split(' ').map(n=>n[0]).join('')}" alt="${member.name}" class="team-img rounded-circle mx-auto mb-3">
+                            <h3 class="fs-6 fw-bold text-white">${member.name}</h3>
+                            <p class="text-brand-cyan small">${member.position}</p>
+                        </div>`;
+                    internalContainer.innerHTML += memberHtml;
+                });
+            }
+
+            // Populate external advisors
+            if(externalContainer){
+                externalTeam.forEach((member, index)=>{
+                    const memberHtml = `
+                        <div class="col-6 col-md-4 col-lg-3 text-center animate-on-scroll" style="transition-delay: ${index * 50}ms">
+                            <img src="https://placehold.co/400x400/1e293b/FFFFFF?text=${member.name.split(' ').map(n=>n[0]).join('')}" alt="${member.name}" class="team-img rounded-circle mx-auto mb-3 border-secondary">
+                            <h3 class="fs-6 fw-bold text-white">${member.name}</h3>
+                            <p class="text-secondary small">${member.position}</p>
+                        </div>`;
+                    externalContainer.innerHTML += memberHtml;
+                });
+            }
+
+            // --- On-Scroll Fade-In Animation ---
+            // This uses the Intersection Observer API to add a 'is-visible' class
+            // to elements when they enter the viewport.
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing after animation
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            });
+
+            // Observe all elements with the animation class
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach(el => observer.observe(el));
+        });
+
+        // --- Three.js 3D Background ---
+        const canvas = document.getElementById('bg-canvas');
+        if (canvas) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            const particlesGeometry = new THREE.BufferGeometry;
+            const particlesCount = 7000;
+            const posArray = new Float32Array(particlesCount * 3);
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 20;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0x22d3ee, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            camera.position.z = 5;
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (event) => { mouseX = event.clientX; mouseY = event.clientY; });
+            const clock = new THREE.Clock();
+            const animate = () => {
+                requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
+                particlesMesh.rotation.y = -0.05 * elapsedTime;
+                const targetX = (mouseX / window.innerWidth) * 2 - 1;
+                const targetY = -(mouseY / window.innerHeight) * 2 + 1;
+                camera.position.x += ( targetX - camera.position.x ) * 0.05;
+                camera.position.y += ( targetY - camera.position.y ) * 0.05;
+                camera.lookAt(scene.position);
+                renderer.render(scene, camera);
+            };
+            animate();
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+        }
+    </script>
+</body>
+</html>
