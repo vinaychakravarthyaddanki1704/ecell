@@ -607,7 +607,6 @@
                             <a href="mailto:placements@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none">placements@sithyd.siu.edu.in</a>
                         </div>
                     </div>
-                    <!-- Moved content for Mr. Vinay Chakravarthy Addanki and address here -->
                     <div class="row justify-content-center align-items-center mt-5">
                         <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
                             <!-- Placeholder image for Mr. Vinay Chakravarthy Addanki -->
@@ -658,27 +657,33 @@
         // --- DATA ---
         // Data for internal team members
         const internalTeam = [
-            { name: "Dr. Rajanikanth Aluvalu", position: "Director & Chair Person", email: "director@sithyd.siu.edu.in", phone: "+91 9978967155" },
-            { name: "Mr. Sai Prashanth", position: "Head, Entrepreneurship and Start-up Cell & Convenor", email: "saiprashanth@sithyd.siu.edu.in", phone: "+91 7093319953" },
-            { name: "Dr. Amulya Prasad Panda", position: "Head, IIC & Co-Convenor", email: "amulya.panda@sithyd.siu.edu.in", phone: "+91 9110924718" },
-            { name: "Dr. Dhruba Jyothi Bora", position: "Faculty Coordinator", email: "dhruba.bora@sithyd.siu.edu.in", phone: "+91 8135026605" },
-            { name: "Mr. D. Anand Kumar", position: "Coordinator", email: "anand.kumar@sithyd.siu.edu.in", phone: "+91 9640064446" },
-            { name: "Mr. Vinay Chakravarthy Addanki", position: "President, E-Cell", email: "24070721043@sithyd.siu.edu.in", phone: "+91 8977503583" },
-            { name: "Mr. Sujay Indupuru", position: "Vice President, E-Cell", email: "24070721040@sithyd.siu.edu.in", phone: "+91 8790034453" },
-            { name: "Mr. P Karthik", position: "Logistics & Partnership Head, E-Cell", email: "24070721030@sithyd.siu.edu.in", phone: "+91 7793968401" },
-            { name: "Mr. Gunda Ravi Partha Sarathi", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "24070724005@sithyd.siu.edu.in", phone: "+91 7207440208" },
-            { name: "Ms. Pendlimadugu Nikitha", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "nikithagoud1720@gmail.com", phone: "+91 9398084720" }
+            { name: "Dr. Rajanikanth Aluvalu", position: "Director & Chair Person", email: "director@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/prof-rajanikanth-aluvalu-26928014/" },
+            { name: "Mr. Sai Prashanth", position: "Head, Entrepreneurship and Start-up Cell & Convenor", email: "saiprashanth@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sai-prashanth-mallellu-bab491196/" },
+            { name: "Dr. Amulya Prasad Panda", position: "Head, IIC & Co-Convenor", email: "amulya.panda@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-amulya-prasad-panda-350292aa/" },
+            { name: "Dr. Dhruba Jyothi Bora", position: "Faculty Coordinator", email: "dhruba.bora@sithyd.siu.edu.in", linkedin: "" }, // No LinkedIn provided
+            { name: "Mr. D. Anand Kumar", position: "Coordinator", email: "anand.kumar@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/d-anand-kumar-474b3434a/" },
+            { name: "Mr. Vinay Chakravarthy Addanki", position: "President, E-Cell", email: "24070721043@sithyd.siu.edu.in", linkedin: "" }, // LinkedIn provided later
+            { name: "Mr. Sujay Indupuru", position: "Vice President, E-Cell", email: "24070721040@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sujay-indupuru-756654312/" },
+            { name: "Mr. P Karthik", position: "Logistics & Partnership Head, E-Cell", email: "24070721030@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/karthik-p-7507752bb/" },
+            { name: "Mr. Gunda Ravi Partha Sarathi", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "24070724005@sithyd.siu.edu.in", linkedin: "http://linkedin.com/in/ravi-partha-sarathi-gunda/" },
+            { name: "Ms. Pendlimadugu Nikitha", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "nikithagoud1720@gmail.com", linkedin: "https://www.linkedin.com/in/pendlimadugu-nikitha-75584a328/" }
         ];
 
         // Data for external advisors and mentors
         const externalTeam = [
-            { name: "Dr. Sriram Birudavolu", position: "CEO - Cyber Security Centre of Excellence DSCI (A NASSCOM Initiative), Hyderabad External Invite & Advisor (Government of Telangana)", email: "sriram.b@dsci.in", phone: "+91 9000818154" },
-            { name: "Mr. Bhanu Prakash Reddy Varla", position: "Director - Plural Technology Pvt Ltd External Invite & Business Mentor, Angel Investor", email: "bhanuindia@yahoo.com", phone: "+91 9963399636" },
-            { name: "Mr. Vidyasagar Tejomurtula", position: "Senior Principal Architect, Zelis, Hyderabad External Invite & Technology Mentor", email: "sagarvt@gmail.com", phone: "+91 9849166950" },
-            { name: "Mr. Pranay Kumar Nalla", position: "Head – Government Innovation & Partnership, Telangana Innovation Cell, Govt. of Telangana External Invite & Advisor (Government of Telangana, Innovation Cell)", email: "prannay.tsic@telangana.gov.in", phone: "+91 7799042489" },
-            { name: "Mr. Vamsi Krishna Jadala", position: "Director, World Trade Center Shamshabad External Invite & Business Mentor", email: "vamshikrishnaj@ieee.org", phone: "+91 7799439281" },
-            { name: "Ms. Shravya Mandadi", position: "Founder, WE&SHE Foundations External Invite & Women Entrepreneur", email: "shravyareddymandadi@gmail.com", phone: "+91 9398084720" }
+            { name: "Dr. Sriram Birudavolu", position: "CEO - Cyber Security Centre of Excellence DSCI (A NASSCOM Initiative), Hyderabad External Invite & Advisor (Government of Telangana)", email: "sriram.b@dsci.in", linkedin: "https://www.linkedin.com/in/dr-sriram-birudavolu/" },
+            { name: "Mr. Bhanu Prakash Reddy Varla", position: "Director - Plural Technology Pvt Ltd External Invite & Business Mentor, Angel Investor", email: "bhanuindia@yahoo.com", linkedin: "https://www.linkedin.com/in/bhanu-prakash-reddy-varla-15850615/" },
+            { name: "Mr. Vidyasagar Tejomurtula", position: "Senior Principal Architect, Zelis, Hyderabad External Invite & Technology Mentor", email: "sagarvt@gmail.com", linkedin: "https://www.linkedin.com/in/tvidyasagar/" },
+            { name: "Mr. Pranay Kumar Nalla", position: "Head – Government Innovation & Partnership, Telangana Innovation Cell, Govt. of Telangana External Invite & Advisor (Government of Telangana, Innovation Cell)", email: "prannay.tsic@telangana.gov.in", linkedin: "https://www.linkedin.com/in/prannay-kumar-nalla-ba874b86/" },
+            { name: "Mr. Vamsi Krishna Jadala", position: "Director, World Trade Center Shamshabad External Invite & Business Mentor", email: "vamshikrishnaj@ieee.org", linkedin: "https://www.linkedin.com/in/vamsikrishnaj/" },
+            { name: "Ms. Shravya Mandadi", position: "Founder, WE&SHE Foundations External Invite & Women Entrepreneur", email: "shravyareddymandadi@gmail.com", linkedin: "https://www.linkedin.com/in/shravya-mandadi-01067318b/" }
         ];
+
+        // Manually add LinkedIn for Vinay Chakravarthy Addanki as it was provided separately
+        const vinayIndex = internalTeam.findIndex(member => member.name === "Mr. Vinay Chakravarthy Addanki");
+        if (vinayIndex !== -1) {
+            internalTeam[vinayIndex].linkedin = "https://www.linkedin.com/in/vinay-chakravarthy-addanki/";
+        }
 
         // --- SCRIPTING ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -702,7 +707,7 @@
                         <p class="${positionTextColorClass} small">${member.position}</p>
                         <div class="d-flex justify-content-center mt-2">
                             ${member.email ? `<a href="mailto:${member.email}" class="text-secondary social-icon mx-1" title="Email ${member.name}"><i class="fas fa-envelope"></i></a>` : ''}
-                            <a href="#" class="text-secondary social-icon mx-1" title="LinkedIn Profile (Placeholder)"><i class="fab fa-linkedin"></i></a>
+                            ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" class="text-secondary social-icon mx-1" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>` : ''}
                         </div>
                     </div>`;
             };
@@ -725,7 +730,7 @@
                             <p class="text-secondary small">${member.position}</p>
                             <div class="d-flex justify-content-center mt-2">
                                 ${member.email ? `<a href="mailto:${member.email}" class="text-secondary social-icon mx-1" title="Email ${member.name}"><i class="fas fa-envelope"></i></a>` : ''}
-                                <a href="#" class="text-secondary social-icon mx-1" title="LinkedIn Profile (Placeholder)"><i class="fab fa-linkedin"></i></a>
+                                ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" class="text-secondary social-icon mx-1" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>` : ''}
                             </div>
                         </div>`;
                     externalContainer.innerHTML += memberHtml;
