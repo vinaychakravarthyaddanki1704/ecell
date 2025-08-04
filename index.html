@@ -18,7 +18,7 @@
 
     <!-- Three.js Library for the interactive 3D background -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
+    
     <style>
         /* CSS Variables for consistent theming */
         :root {
@@ -72,6 +72,19 @@
             transform: translateY(-2px); /* Slight lift effect */
         }
 
+        /* Navbar logo styling */
+        .navbar-brand .logo-icon {
+            margin-right: 0.5rem;
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .navbar-brand .logo-icon svg {
+            fill: var(--brand-cyan);
+        }
+
         /* Hero section styling to center content and fill viewport height */
         .hero-section {
             min-height: 100vh; /* Full viewport height */
@@ -112,7 +125,6 @@
             justify-content: center; /* Horizontally center content */
             white-space: nowrap; /* Prevent text wrapping */
         }
-
         .btn-primary-uniform:hover {
             background-color: #67e8f9; /* Lighter cyan on hover */
             color: var(--dark-bg);
@@ -134,7 +146,6 @@
             height: 24px;
             transition: color 0.3s ease, transform 0.2s ease; /* Smooth color and transform transition */
         }
-
         .social-icon:hover svg, .social-icon:hover i { /* Enhanced hover effect for social icons */
             color: var(--brand-cyan); /* Change color to brand cyan on hover */
             transform: scale(1.2); /* Slightly scale up on hover */
@@ -154,10 +165,41 @@
             transform: translateY(40px); /* Start slightly below final position */
             transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth transition */
         }
-
         .animate-on-scroll.is-visible {
             opacity: 1; /* Fade in */
             transform: translateY(0); /* Move to final position */
+        }
+        
+        /* New styling for event cards and images */
+        .event-card {
+            background-color: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .event-card .event-title {
+            font-size: 1.5rem;
+            color: var(--brand-cyan);
+            font-weight: 600;
+        }
+        .event-card .event-description {
+            margin-top: 1rem;
+            color: #e5e7eb;
+        }
+        .event-image {
+            width: 100%;
+            height: 250px; /* Fixed height for consistency */
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         /* Specific styles for policy section for better readability */
@@ -212,7 +254,44 @@
             color: #e5e7eb;
             padding: 1.5rem;
         }
-
+        
+        /* Custom Modal styling for the form */
+        .modal-content {
+            background-color: var(--dark-card);
+            color: #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .form-control {
+            background-color: #334155;
+            color: #e5e7eb;
+            border-color: #64748b;
+        }
+        .form-control:focus {
+            background-color: #334155;
+            color: #e5e7eb;
+            border-color: var(--brand-cyan);
+            box-shadow: 0 0 0 0.25rem rgba(34, 211, 238, 0.25);
+        }
+        .form-label {
+            color: var(--brand-cyan);
+            font-weight: 600;
+        }
+        /* Style for the loading spinner */
+        #loadingSpinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1051;
+        }
+        
         /* Text size adjustments */
         .content-section p {
             font-size: 1.05rem; /* Slightly smaller for general paragraphs */
@@ -228,6 +307,37 @@
             font-size: 1.05rem !important;
         }
 
+        /* "Go to Top" button styling */
+        #goToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--brand-cyan);
+            color: var(--dark-bg);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 99;
+        }
+
+        #goToTopBtn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(34, 211, 238, 0.5);
+        }
+
+        #goToTopBtn.show {
+            opacity: 1;
+        }
+        
         /* Responsive adjustments for smaller screens */
         @media (max-width: 767.98px) {
             .display-4 {
@@ -253,16 +363,34 @@
             .footer-social-icons {
                 justify-content: center !important; /* Center align social icons in footer on mobile */
             }
+            #goToTopBtn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="100">
 
+    <!-- Loading spinner for API calls -->
+    <div id="loadingSpinner" class="spinner-border text-info" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+
     <!-- Header / Navigation Bar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top" id="navbarNav">
         <div class="container">
             <!-- Brand Logo/Name -->
-            <a class="navbar-brand fs-4 fw-bold" href="#home">E-Cell <span class="text-brand-cyan">SIT-H</span></a>
+            <a class="navbar-brand fs-4 fw-bold" href="#home">
+                <!-- Logo SVG -->
+                <span class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L6 8h3v4h6V8h3l-6-6zM4 14v2h16v-2H4zM4 18v2h16v-2H4z"/>
+                    </svg>
+                </span>
+                E-Cell <span class="text-brand-cyan">SIT-H</span>
+            </a>
             <!-- Toggler button for mobile navigation -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -273,6 +401,7 @@
                     <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#vision">Vision</a></li>
                     <li class="nav-item"><a class="nav-link" href="#get-involved">Initiatives</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li> <!-- Updated Events Nav Link -->
                     <li class="nav-item"><a class="nav-link" href="#policy">Policy</a></li>
                     <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -383,8 +512,62 @@
             </div>
         </section>
 
+        <!-- Events Section - Dynamically populated with data from brochure -->
+        <section id="events" class="content-section bg-dark-card">
+            <div class="container">
+                <div class="text-center mb-5 animate-on-scroll">
+                    <h2 class="display-5 fw-bold text-white">Events & Highlights</h2>
+                    <p class="lead text-secondary mt-3">Catch up on our latest events and activities that fuel our entrepreneurial spirit.</p>
+                </div>
+                
+                <!-- Events will be dynamically added here -->
+                <div id="events-container" class="row g-4">
+                    <!-- T-HUB Visit -->
+                    <div class="col-lg-6 animate-on-scroll">
+                        <div class="event-card">
+                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=T-HUB+Visit" alt="T-HUB Visit" class="event-image">
+                            <h3 class="event-title">T-HUB Visit</h3>
+                            <p class="event-description">Students visited T-Hub Hyderabad, one of India's leading startup incubators, gaining firsthand exposure to the startup world. They participated in interactive sessions with founders and explored co-working spaces.</p>
+                        </div>
+                    </div>
+                    <!-- ICASSP Entrepreneurship Forum -->
+                    <div class="col-lg-6 animate-on-scroll" style="transition-delay: 100ms;">
+                        <div class="event-card">
+                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=ICASSP+Forum" alt="ICASSP Entrepreneurship Forum" class="event-image">
+                            <h3 class="event-title">ICASSP Entrepreneurship Forum</h3>
+                            <p class="event-description">The team attended the ICASSP Entrepreneurship Forum, a platform that connects innovators and industry leaders to explore the intersection of signal processing and entrepreneurship, featuring startup pitches and panel discussions.</p>
+                        </div>
+                    </div>
+                    <!-- Microsoft Global Fabric Day -->
+                    <div class="col-lg-6 animate-on-scroll">
+                        <div class="event-card">
+                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=Microsoft+Visit" alt="Microsoft Global Fabric Day" class="event-image">
+                            <h3 class="event-title">Microsoft Global Fabric Day</h3>
+                            <p class="event-description">E-Cell members visited the Microsoft Office in Hyderabad, gaining insights into the company's innovation, workplace culture, and approach to product development. It was a valuable experience bridging academic learning with industry practices.</p>
+                        </div>
+                    </div>
+                    <!-- Session with Ahmed Tewfik -->
+                    <div class="col-lg-6 animate-on-scroll" style="transition-delay: 100ms;">
+                        <div class="event-card">
+                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=Ahmed+Tewfik+Session" alt="Session with Ahmed Tewfik" class="event-image">
+                            <h3 class="event-title">Session with Ahmed Tewfik</h3>
+                            <p class="event-description">Entrepreneurship Cell members had the unique opportunity to attend an exclusive session with Ahmed Tewfik, Machine Learning Director at Apple. He shared deep insights into AI and machine learning and career pathways in tech.</p>
+                        </div>
+                    </div>
+                    <!-- IDEATHON 1.0 -->
+                    <div class="col-lg-6 animate-on-scroll">
+                        <div class="event-card">
+                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=Ideathon+1.0" alt="IDEATHON 1.0" class="event-image">
+                            <h3 class="event-title">IDEATHON 1.0</h3>
+                            <p class="event-description">IDEATHON 1.0 was a flagship event providing a platform for students to pitch their innovative startup ideas to a panel of mentors and experts. The event encouraged creative thinking and entrepreneurial confidence.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Innovation & Entrepreneurship Policy Section -->
-        <section id="policy" class="content-section bg-dark-card policy-section">
+        <section id="policy" class="content-section">
             <div class="container">
                 <div class="text-center mb-5 animate-on-scroll">
                     <h2 class="display-5 fw-bold text-white">Innovation & Entrepreneurship (I & E) Policy</h2>
@@ -415,7 +598,7 @@
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#policyAccordion">
                             <div class="accordion-body">
-                                <p>Establish a dedicated Entrepreneurship & Start-up Cell (E-Cell) office and pre-incubation hub. Ensure equitable access to incubation facilities for students, faculty, alumni, and staff associated with start-ups and innovation. Resource sharing with SCEI and other technology parks.</p>
+                                <p>Establish a dedicated Entrepreneurship & Start-up Cell (E-Cell) office and pre-incubation hub. Ensure equitable access to incubation facilities for students, faculty, alumni, and staff associated with start-ups and innovation. Resource sharing with and other technology parks.</p>
                             </div>
                         </div>
                     </div>
@@ -554,7 +737,7 @@
                 <!-- New section for Brochure -->
                 <div class="text-center mt-5 animate-on-scroll" style="transition-delay: 550ms;">
                     <h3 class="fs-2 fw-bold text-white mb-4">Our Brochure</h3>
-                    <a href="#" target="_blank" class="btn btn-primary-uniform">
+                    <a href="uploaded:E-CELL BROCHURE 2025 (4).pdf" target="_blank" class="btn btn-primary-uniform">
                         <i class="fas fa-download me-2"></i> Download E-Cell Brochure
                     </a>
                 </div>
@@ -562,10 +745,10 @@
                 <div class="text-center mt-5 animate-on-scroll" style="transition-delay: 600ms;">
                     <h3 class="fs-2 fw-bold text-white mb-4">Important Documents & Partners</h3>
                     <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
-                        <a href="uploaded:Telangana-Innovation-Policy-2016-1-1.pdf" target="_blank" class="btn btn-primary-uniform">
+                        <a href="https://sithyd.siu.edu.in/pdfs/Telangana-Innovation-Policy-2016-1-1.pdf" target="_blank" class="btn btn-primary-uniform">
                             <i class="fas fa-file-pdf me-2"></i> Telangana Policy
                         </a>
-                        <a href="uploaded:national-policy.pdf" target="_blank" class="btn btn-primary-uniform">
+                        <a href="https://sithyd.siu.edu.in/pdfs/national-policy.pdf" target="_blank" class="btn btn-primary-uniform">
                             <i class="fas fa-file-pdf me-2"></i> National Policy
                         </a>
                         <a href="https://scei.org.in/" target="_blank" class="btn btn-primary-uniform">
@@ -598,30 +781,44 @@
                 <div class="mt-5 animate-on-scroll" style="transition-delay: 200ms;">
                    <div class="row justify-content-center align-items-center">
                         <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
-                            <!-- Contact person image placeholder -->
-                            <img src="https://placehold.co/300x300/1e293b/FFFFFF?text=SPM" alt="Mr. Sai Prashanth Mallellu" class="contact-img rounded-circle mx-auto">
+                            <!-- Contact person image -->
+                            <img src="prashanth.jpeg" alt="Mr. Sai Prashanth Mallellu" class="contact-img rounded-circle mx-auto">
                         </div>
                         <div class="col-lg-5 col-md-6 text-center text-md-start fs-5">
                             <p class="fw-bold text-white mb-1">Mr. Sai Prashanth Mallellu</p>
                             <p class="text-secondary">Head, Entrepreneurship and Start-up Cell (E-Cell)</p>
-                            <a href="mailto:placements@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none">placements@sithyd.siu.edu.in</a>
+                            <p class="text-secondary mb-1">Email: <a href="mailto:placements@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none">placements@sithyd.siu.edu.in</a></p>
                         </div>
                     </div>
                     <div class="row justify-content-center align-items-center mt-5">
                         <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
-                            <!-- Placeholder image for Mr. Vinay Chakravarthy Addanki -->
-                            <img src="https://placehold.co/300x300/1e293b/FFFFFF?text=VCA" alt="Mr. Vinay Chakravarthy Addanki" class="contact-img rounded-circle mx-auto">
+                            <!-- Contact person image -->
+                            <img src="rajinikanth.jpeg" alt="Mr. Vinay Chakravarthy Addanki" class="contact-img rounded-circle mx-auto">
                         </div>
                         <div class="col-lg-5 col-md-6 text-center text-md-start fs-5">
                             <p class="fw-bold text-white mb-1">Mr. Vinay Chakravarthy Addanki</p>
                             <p class="text-secondary">President, E-Cell</p>
-                            <a href="mailto:vinay.addanki@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none">vinay.addanki@sithyd.siu.edu.in</a>
+                            <p class="text-secondary mb-1">Email: <a href="mailto:24070721043@sithyd.siu.edu.in" class="text-brand-cyan text-decoration-none">24070721043@sithyd.siu.edu.in</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        
+        <!-- Institutional Address Section -->
+        <section class="py-5 text-center text-secondary bg-dark-card">
+            <div class="container">
+                <p class="mb-1">Symbiosis Institute of Technology, Hyderabad</p>
+                <p class="mb-1">A Constituent of Symbiosis International University (Accredited by NAAC with 'A++' grade)</p>
+                <p class="mb-1">Survey Number 292, Off Bangalore Highway, Modallaguda (V), Nandigama (M),</p>
+                <p class="mb-1">Rangareddy Dist, Hyderabad, Telangana, India</p>
+                <p class="mb-0">Pin Code: 509217</p>
+            </div>
+        </section>
     </main>
+
+    <!-- Go To Top Button -->
+    <button id="goToTopBtn" class="d-none d-md-flex"><i class="fas fa-arrow-up"></i></button>
 
     <!-- Footer Section -->
     <footer class="py-5 border-top border-secondary bg-dark-card">
@@ -633,19 +830,18 @@
                     <p class="mt-3 text-secondary small">&copy; 2025 E-Cell, SIT Hyderabad. All Rights Reserved.</p>
                 </div>
                 <div class="col-md-4 text-center text-md-end">
-                    <!-- Social Media Icons (Twitter, Facebook, Instagram) -->
+                    <!-- Social Media Icons -->
                     <div class="d-flex justify-content-center justify-content-md-end mt-3">
-                        <a href="#" class="text-secondary social-icon me-3">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-                        </a>
-                        <a href="#" class="text-secondary social-icon me-3">
-                           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878V14.89H8.078v-2.89h2.36V9.601c0-2.328 1.383-3.625 3.518-3.625 1.006 0 1.87.074 2.122.107v2.583h-1.52c-1.13 0-1.35.536-1.35 1.322v1.75h2.867l-.374 2.89H15.11v7.008C19.343 21.128 22 16.991 22 12z"></path></svg>
-                        </a>
-                        <a href="#" class="text-secondary social-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zM12 16c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm4.438-7.849c-.495 0-.896.401-.896.896s.401.896.896.896.896-.401.896-.896-.401-.896-.896-.896z"></path></svg>
-                        </a>
+                        <!-- LinkedIn Icon -->
+                        <a href="https://www.linkedin.com/in/symbiosis-institute-of-technology-hyderabad/" target="_blank" class="text-secondary social-icon mx-1" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
+                        <!-- Instagram Icon -->
+                        <a href="https://www.instagram.com/symbiosis_sit_hyderabad/" target="_blank" class="text-secondary social-icon mx-1" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
+            </div>
+            <!-- Display current User ID for debugging/management purposes -->
+            <div class="container mt-4 text-center text-secondary small">
+                <p class="mb-0">Your User ID: <span id="userIdDisplay">Authenticating...</span></p>
             </div>
         </div>
     </footer>
@@ -653,56 +849,54 @@
     <!-- Bootstrap JavaScript Bundle (includes Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script>
-        // --- DATA ---
-        // Data for internal team members
-        const internalTeam = [
-            { name: "Dr. Rajanikanth Aluvalu", position: "Director & Chair Person", email: "director@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/prof-rajanikanth-aluvalu-26928014/" },
-            { name: "Mr. Sai Prashanth", position: "Head, Entrepreneurship and Start-up Cell & Convenor", email: "saiprashanth@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sai-prashanth-mallellu-bab491196/" },
-            { name: "Dr. Amulya Prasad Panda", position: "Head, IIC & Co-Convenor", email: "amulya.panda@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-amulya-prasad-panda-350292aa/" },
-            { name: "Dr. Dhruba Jyothi Bora", position: "Faculty Coordinator", email: "dhruba.bora@sithyd.siu.edu.in", linkedin: "" }, // No LinkedIn provided
-            { name: "Mr. D. Anand Kumar", position: "Coordinator", email: "anand.kumar@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/d-anand-kumar-474b3434a/" },
-            { name: "Mr. Vinay Chakravarthy Addanki", position: "President, E-Cell", email: "24070721043@sithyd.siu.edu.in", linkedin: "" }, // LinkedIn provided later
-            { name: "Mr. Sujay Indupuru", position: "Vice President, E-Cell", email: "24070721040@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sujay-indupuru-756654312/" },
-            { name: "Mr. P Karthik", position: "Logistics & Partnership Head, E-Cell", email: "24070721030@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/karthik-p-7507752bb/" },
-            { name: "Mr. Gunda Ravi Partha Sarathi", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "24070724005@sithyd.siu.edu.in", linkedin: "http://linkedin.com/in/ravi-partha-sarathi-gunda/" },
-            { name: "Ms. Pendlimadugu Nikitha", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "nikithagoud1720@gmail.com", linkedin: "https://www.linkedin.com/in/pendlimadugu-nikitha-75584a328/" }
-        ];
+    <!-- Firebase SDK for real-time database functionality -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Data for external advisors and mentors
-        const externalTeam = [
-            { name: "Dr. Sriram Birudavolu", position: "CEO - Cyber Security Centre of Excellence DSCI (A NASSCOM Initiative), Hyderabad External Invite & Advisor (Government of Telangana)", email: "sriram.b@dsci.in", linkedin: "https://www.linkedin.com/in/dr-sriram-birudavolu/" },
-            { name: "Mr. Bhanu Prakash Reddy Varla", position: "Director - Plural Technology Pvt Ltd External Invite & Business Mentor, Angel Investor", email: "bhanuindia@yahoo.com", linkedin: "https://www.linkedin.com/in/bhanu-prakash-reddy-varla-15850615/" },
-            { name: "Mr. Vidyasagar Tejomurtula", position: "Senior Principal Architect, Zelis, Hyderabad External Invite & Technology Mentor", email: "sagarvt@gmail.com", linkedin: "https://www.linkedin.com/in/tvidyasagar/" },
-            { name: "Mr. Pranay Kumar Nalla", position: "Head – Government Innovation & Partnership, Telangana Innovation Cell, Govt. of Telangana External Invite & Advisor (Government of Telangana, Innovation Cell)", email: "prannay.tsic@telangana.gov.in", linkedin: "https://www.linkedin.com/in/prannay-kumar-nalla-ba874b86/" },
-            { name: "Mr. Vamsi Krishna Jadala", position: "Director, World Trade Center Shamshabad External Invite & Business Mentor", email: "vamshikrishnaj@ieee.org", linkedin: "https://www.linkedin.com/in/vamsikrishnaj/" },
-            { name: "Ms. Shravya Mandadi", position: "Founder, WE&SHE Foundations External Invite & Women Entrepreneur", email: "shravyareddymandadi@gmail.com", linkedin: "https://www.linkedin.com/in/shravya-mandadi-01067318b/" }
-        ];
-
-        // Manually add LinkedIn for Vinay Chakravarthy Addanki as it was provided separately
-        const vinayIndex = internalTeam.findIndex(member => member.name === "Mr. Vinay Chakravarthy Addanki");
-        if (vinayIndex !== -1) {
-            internalTeam[vinayIndex].linkedin = "https://www.linkedin.com/in/vinay-chakravarthy-addanki/";
-        }
-
-        // --- SCRIPTING ---
         document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
             const internalContainer = document.querySelector('#internal-team-container');
             const externalContainer = document.querySelector('#external-team-container');
+            const eventsContainer = document.querySelector('#events-container');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const userIdDisplay = document.getElementById('userIdDisplay');
+            let db, auth;
+            let currentUserId = null;
+            const goToTopBtn = document.getElementById('goToTopBtn');
 
-            // Function to generate initials from a name for image placeholders
-            const getInitials = (name) => {
-                return name.split(' ').map(n => n[0]).join('');
-            };
+            // --- DATA ---
+            const internalTeam = [
+                { name: "Dr. Rajanikanth Aluvalu", position: "Director & Chair Person", email: "director@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/prof-rajanikanth-aluvalu-26928014/", photo: "rajinikanth.jpeg" },
+                { name: "Mr. Sai Prashanth Mallellu", position: "Head, Entrepreneurship and Start-up Cell (E-Cell)", email: "placements@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sai-prashanth-mallellu-bab491196/", photo: "prashanth.jpeg" },
+                { name: "Dr. Amulya Prasad Panda", position: "Head, IIC & Co-Convenor", email: "amulya.panda@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-amulya-prasad-panda-350292aa/", photo: "amulya.jpeg" },
+                { name: "Dr. Dhruba Jyothi Bora", position: "Faculty Coordinator", email: "dhruba.bora@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-dhruba-bora-79bb9144/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=DJB" },
+                { name: "Mr. D. Anand Kumar", position: "Coordinator", email: "anand.kumar@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/d-anand-kumar-474b3434a/", photo: "anand.jpeg" },
+                { name: "Mr. Vinay Chakravarthy Addanki", position: "President, E-Cell", email: "24070721043@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/vinayaddanki/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=VCA" },
+                { name: "Mr. Sujay Indupuru", position: "Vice President, E-Cell", email: "24070721040@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sujay-indupuru-756654312/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=SI" },
+                { name: "Mr. P Karthik", position: "Logistics & Partnership Head, E-Cell", email: "24070721030@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/karthik-p-7507752bb/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=PK" },
+                { name: "Mr. Gunda Ravi Partha Sarathi", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "24070724005@sithyd.siu.edu.in", linkedin: "http://linkedin.com/in/ravi-partha-sarathi-gunda/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=GRPS" },
+                { name: "Ms. Pendlimadugu Nikitha", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "nikithagoud1720@gmail.com", linkedin: "https://www.linkedin.com/in/pendlimadugu-nikitha-75584a328/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=PN" }
+            ];
 
-            // Function to create a team member card
+            const externalTeam = [
+                { name: "Dr. Sriram Birudavolu", position: "CEO - Cyber Security Centre of Excellence DSCI (A NASSCOM Initiative), Hyderabad External Invite & Advisor (Government of Telangana)", email: "sriram.b@dsci.in", linkedin: "https://www.linkedin.com/in/dr-sriram-birudavolu/", photo: "sriram.jpeg" },
+                { name: "Mr. Bhanu Prakash Reddy Varla", position: "Director - Plural Technology Pvt Ltd External Invite & Business Mentor, Angel Investor", email: "bhanuindia@yahoo.com", linkedin: "https://www.linkedin.com/in/bhanu-prakash-reddy-varla-15850615/", photo: "bhanu.jpeg" },
+                { name: "Mr. Vidyasagar Tejomurtula", position: "Senior Principal Architect, Zelis, Hyderabad External Invite & Technology Mentor", email: "sagarvt@gmail.com", linkedin: "https://www.linkedin.com/in/tvidyasagar/", photo: "Vidyasagar Tejomurtula.jpeg" },
+                { name: "Mr. Pranay Kumar Nalla", position: "Head – Government Innovation & Partnership, Telangana Innovation Cell, Govt. of Telangana External Invite & Advisor (Government of Telangana, Innovation Cell)", email: "prannay.tsic@telangana.gov.in", linkedin: "https://www.linkedin.com/in/prannay-kumar-nalla-ba874b86/", photo: "Pranay Kumar Nalla.jpeg" },
+                { name: "Mr. Vamsi Krishna Jadala", position: "Director, World Trade Center Shamshabad External Invite & Business Mentor", email: "vamshikrishnaj@ieee.org", linkedin: "https://www.linkedin.com/in/vamsikrishnaj/", photo: "Vamsi Krishna Jadala.jpeg" },
+                { name: "Ms. Shravya Mandadi", position: "Founder, WE&SHE Foundations External Invite & Women Entrepreneur", email: "shravyareddymandadi@gmail.com", linkedin: "https://www.linkedin.com/in/shravya-mandadi-01067318b/", photo: "Shravya Mandadi.jpeg" }
+            ];
+
+            // Function to create a team member card with a photo
             const createTeamMemberCard = (member, index, isInternal) => {
                 const borderColorClass = isInternal ? 'border-brand-cyan' : 'border-secondary';
                 const positionTextColorClass = isInternal ? 'text-brand-cyan' : 'text-secondary';
-
+                
                 return `
                     <div class="col-6 col-md-4 col-lg-2 text-center animate-on-scroll" style="transition-delay: ${index * 50}ms">
-                        <img src="https://placehold.co/400x400/1e293b/FFFFFF?text=${getInitials(member.name)}" alt="${member.name}" class="team-img rounded-circle mx-auto mb-3 ${borderColorClass}">
+                        <img src="${member.photo}" alt="${member.name}" class="team-img rounded-circle mx-auto mb-3 ${borderColorClass}">
                         <h3 class="fs-6 fw-bold text-white">${member.name}</h3>
                         <p class="${positionTextColorClass} small">${member.position}</p>
                         <div class="d-flex justify-content-center mt-2">
@@ -713,28 +907,69 @@
             };
 
             // Populate internal team members dynamically
-            if (internalContainer) {
-                internalTeam.forEach((member, index) => {
-                    internalContainer.innerHTML += createTeamMemberCard(member, index, true);
-                });
-            }
+            const populateTeam = () => {
+                if (internalContainer) {
+                    internalTeam.forEach((member, index) => {
+                        internalContainer.innerHTML += createTeamMemberCard(member, index, true);
+                    });
+                }
+                // Populate external advisors dynamically
+                if (externalContainer) {
+                    externalTeam.forEach((member, index) => {
+                        const colClass = "col-6 col-md-4 col-lg-3";
+                        const memberHtml = `
+                            <div class="${colClass} text-center animate-on-scroll" style="transition-delay: ${index * 50}ms">
+                                <img src="${member.photo}" alt="${member.name}" class="team-img rounded-circle mx-auto mb-3 border-secondary">
+                                <h3 class="fs-6 fw-bold text-white">${member.name}</h3>
+                                <p class="text-secondary small">${member.position}</p>
+                                <div class="d-flex justify-content-center mt-2">
+                                    ${member.email ? `<a href="mailto:${member.email}" class="text-secondary social-icon mx-1" title="Email ${member.name}"><i class="fas fa-envelope"></i></a>` : ''}
+                                    ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" class="text-secondary social-icon mx-1" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>` : ''}
+                                </div>
+                            </div>`;
+                        externalContainer.innerHTML += memberHtml;
+                    });
+                }
+            };
+            populateTeam();
 
-            // Populate external advisors dynamically
-            if (externalContainer) {
-                externalTeam.forEach((member, index) => {
-                    const colClass = "col-6 col-md-4 col-lg-3";
-                    const memberHtml = `
-                        <div class="${colClass} text-center animate-on-scroll" style="transition-delay: ${index * 50}ms">
-                            <img src="https://placehold.co/400x400/1e293b/FFFFFF?text=${getInitials(member.name)}" alt="${member.name}" class="team-img rounded-circle mx-auto mb-3 border-secondary">
-                            <h3 class="fs-6 fw-bold text-white">${member.name}</h3>
-                            <p class="text-secondary small">${member.position}</p>
-                            <div class="d-flex justify-content-center mt-2">
-                                ${member.email ? `<a href="mailto:${member.email}" class="text-secondary social-icon mx-1" title="Email ${member.name}"><i class="fas fa-envelope"></i></a>` : ''}
-                                ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" class="text-secondary social-icon mx-1" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>` : ''}
-                            </div>
-                        </div>`;
-                    externalContainer.innerHTML += memberHtml;
+            // --- Firestore Real-time Event Management ---
+            // This function is no longer needed since events are now hardcoded based on the brochure.
+            // const renderEvents = () => {
+            //     eventsContainer.innerHTML = '<p class="text-center text-secondary">Events will be added and updated here regularly. Check back soon!</p>';
+            // };
+            // renderEvents();
+
+            // Initialize Firebase and set up auth listener for user ID
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+            window.appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+            
+            if (Object.keys(firebaseConfig).length) {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        currentUserId = user.uid;
+                        userIdDisplay.textContent = currentUserId;
+                    } else {
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Firebase Auth Error: ", error);
+                            userIdDisplay.textContent = "Error";
+                        }
+                    }
                 });
+            } else {
+                console.error("Firebase configuration is missing.");
+                userIdDisplay.textContent = "No Firebase Config";
             }
 
             // --- On-Scroll Fade-In Animation ---
@@ -750,11 +985,29 @@
 
             const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
             elementsToAnimate.forEach(el => observer.observe(el));
+
+            // --- Go To Top Button Logic ---
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    goToTopBtn.classList.add('show');
+                } else {
+                    goToTopBtn.classList.remove('show');
+                }
+            });
+
+            goToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
 
         // --- Three.js 3D Background Animation ---
-        const canvas = document.getElementById('bg-canvas');
-        if (canvas) {
+        window.onload = function() {
+            const canvas = document.getElementById('bg-canvas');
+            if (!canvas) {
+                console.error("Canvas element not found.");
+                return;
+            }
+
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
@@ -798,11 +1051,8 @@
                 camera.lookAt(scene.position);
                 renderer.render(scene, camera);
             };
-
-            // Ensure animate is called after window loads
-            window.onload = function() {
-                animate();
-            };
+            
+            animate();
 
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -810,7 +1060,7 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             });
-        }
+        };
     </script>
 </body>
 </html>
