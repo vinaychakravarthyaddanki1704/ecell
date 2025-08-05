@@ -401,7 +401,7 @@
                     <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#vision">Vision</a></li>
                     <li class="nav-item"><a class="nav-link" href="#get-involved">Initiatives</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li> <!-- Updated Events Nav Link -->
+                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="#policy">Policy</a></li>
                     <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -512,7 +512,7 @@
             </div>
         </section>
 
-        <!-- Events Section - Dynamically populated with data from brochure -->
+        <!-- Events Section - Now links to the new events page -->
         <section id="events" class="content-section bg-dark-card">
             <div class="container">
                 <div class="text-center mb-5 animate-on-scroll">
@@ -520,48 +520,11 @@
                     <p class="lead text-secondary mt-3">Catch up on our latest events and activities that fuel our entrepreneurial spirit.</p>
                 </div>
                 
-                <!-- Events will be dynamically added here -->
-                <div id="events-container" class="row g-4">
-                    <!-- T-HUB Visit -->
-                    <div class="col-lg-6 animate-on-scroll">
-                        <div class="event-card">
-                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=T-HUB+Visit" alt="T-HUB Visit" class="event-image">
-                            <h3 class="event-title">T-HUB Visit</h3>
-                            <p class="event-description">Students visited T-Hub Hyderabad, one of India's leading startup incubators, gaining firsthand exposure to the startup world. They participated in interactive sessions with founders and explored co-working spaces.</p>
-                        </div>
-                    </div>
-                    <!-- ICASSP Entrepreneurship Forum -->
-                    <div class="col-lg-6 animate-on-scroll" style="transition-delay: 100ms;">
-                        <div class="event-card">
-                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=ICASSP+Forum" alt="ICASSP Entrepreneurship Forum" class="event-image">
-                            <h3 class="event-title">ICASSP Entrepreneurship Forum</h3>
-                            <p class="event-description">The team attended the ICASSP Entrepreneurship Forum, a platform that connects innovators and industry leaders to explore the intersection of signal processing and entrepreneurship, featuring startup pitches and panel discussions.</p>
-                        </div>
-                    </div>
-                    <!-- Microsoft Global Fabric Day -->
-                    <div class="col-lg-6 animate-on-scroll">
-                        <div class="event-card">
-                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=Microsoft+Visit" alt="Microsoft Global Fabric Day" class="event-image">
-                            <h3 class="event-title">Microsoft Global Fabric Day</h3>
-                            <p class="event-description">E-Cell members visited the Microsoft Office in Hyderabad, gaining insights into the company's innovation, workplace culture, and approach to product development. It was a valuable experience bridging academic learning with industry practices.</p>
-                        </div>
-                    </div>
-                    <!-- Session with Ahmed Tewfik -->
-                    <div class="col-lg-6 animate-on-scroll" style="transition-delay: 100ms;">
-                        <div class="event-card">
-                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=Ahmed+Tewfik+Session" alt="Session with Ahmed Tewfik" class="event-image">
-                            <h3 class="event-title">Session with Ahmed Tewfik</h3>
-                            <p class="event-description">Entrepreneurship Cell members had the unique opportunity to attend an exclusive session with Ahmed Tewfik, Machine Learning Director at Apple. He shared deep insights into AI and machine learning and career pathways in tech.</p>
-                        </div>
-                    </div>
-                    <!-- IDEATHON 1.0 -->
-                    <div class="col-lg-6 animate-on-scroll">
-                        <div class="event-card">
-                            <img src="https://placehold.co/800x450/1e293b/FFFFFF?text=Ideathon+1.0" alt="IDEATHON 1.0" class="event-image">
-                            <h3 class="event-title">IDEATHON 1.0</h3>
-                            <p class="event-description">IDEATHON 1.0 was a flagship event providing a platform for students to pitch their innovative startup ideas to a panel of mentors and experts. The event encouraged creative thinking and entrepreneurial confidence.</p>
-                        </div>
-                    </div>
+                <!-- Button to view all events on a separate page -->
+                <div class="text-center animate-on-scroll" style="transition-delay: 100ms;">
+                    <a href="events.html" class="btn btn-primary-uniform">
+                        <i class="fas fa-calendar-alt me-2"></i> View All Events
+                    </a>
                 </div>
             </div>
         </section>
@@ -782,7 +745,7 @@
                    <div class="row justify-content-center align-items-center">
                         <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
                             <!-- Contact person image -->
-                            <img src="prashanth.jpeg" alt="Mr. Sai Prashanth Mallellu" class="contact-img rounded-circle mx-auto">
+                            <img src="images/prashanth.jpeg" alt="Mr. Sai Prashanth Mallellu" class="contact-img rounded-circle mx-auto">
                         </div>
                         <div class="col-lg-5 col-md-6 text-center text-md-start fs-5">
                             <p class="fw-bold text-white mb-1">Mr. Sai Prashanth Mallellu</p>
@@ -793,7 +756,7 @@
                     <div class="row justify-content-center align-items-center mt-5">
                         <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
                             <!-- Contact person image -->
-                            <img src="rajinikanth.jpeg" alt="Mr. Vinay Chakravarthy Addanki" class="contact-img rounded-circle mx-auto">
+                            <img src="images/vinay.jpg" alt="Mr. Vinay Chakravarthy Addanki" class="contact-img rounded-circle mx-auto">
                         </div>
                         <div class="col-lg-5 col-md-6 text-center text-md-start fs-5">
                             <p class="fw-bold text-white mb-1">Mr. Vinay Chakravarthy Addanki</p>
@@ -868,25 +831,25 @@
 
             // --- DATA ---
             const internalTeam = [
-                { name: "Dr. Rajanikanth Aluvalu", position: "Director & Chair Person", email: "director@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/prof-rajanikanth-aluvalu-26928014/", photo: "rajinikanth.jpeg" },
-                { name: "Mr. Sai Prashanth Mallellu", position: "Head, Entrepreneurship and Start-up Cell (E-Cell)", email: "placements@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sai-prashanth-mallellu-bab491196/", photo: "prashanth.jpeg" },
-                { name: "Dr. Amulya Prasad Panda", position: "Head, IIC & Co-Convenor", email: "amulya.panda@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-amulya-prasad-panda-350292aa/", photo: "amulya.jpeg" },
-                { name: "Dr. Dhruba Jyothi Bora", position: "Faculty Coordinator", email: "dhruba.bora@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-dhruba-bora-79bb9144/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=DJB" },
-                { name: "Mr. D. Anand Kumar", position: "Coordinator", email: "anand.kumar@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/d-anand-kumar-474b3434a/", photo: "anand.jpeg" },
-                { name: "Mr. Vinay Chakravarthy Addanki", position: "President, E-Cell", email: "24070721043@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/vinayaddanki/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=VCA" },
-                { name: "Mr. Sujay Indupuru", position: "Vice President, E-Cell", email: "24070721040@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sujay-indupuru-756654312/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=SI" },
-                { name: "Mr. P Karthik", position: "Logistics & Partnership Head, E-Cell", email: "24070721030@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/karthik-p-7507752bb/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=PK" },
-                { name: "Mr. Gunda Ravi Partha Sarathi", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "24070724005@sithyd.siu.edu.in", linkedin: "http://linkedin.com/in/ravi-partha-sarathi-gunda/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=GRPS" },
-                { name: "Ms. Pendlimadugu Nikitha", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "nikithagoud1720@gmail.com", linkedin: "https://www.linkedin.com/in/pendlimadugu-nikitha-75584a328/", photo: "https://placehold.co/400x400/1e293b/FFFFFF?text=PN" }
+                { name: "Dr. Rajanikanth Aluvalu", position: "Director & Chair Person", email: "director@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/prof-rajanikanth-aluvalu-26928014/", photo: "images/rajinikanth.jpeg" },
+                { name: "Mr. Sai Prashanth Mallellu", position: "Head, Entrepreneurship and Start-up Cell (E-Cell)", email: "placements@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sai-prashanth-mallellu-bab491196/", photo: "images/prashanth.jpeg" },
+                { name: "Dr. Amulya Prasad Panda", position: "Head, IIC & Co-Convenor", email: "amulya.panda@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-amulya-prasad-panda-350292aa/", photo: "images/amulya.jpeg" },
+                { name: "Dr. Dhruba Jyothi Bora", position: "Faculty Coordinator", email: "dhruba.bora@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/dr-dhruba-bora-79bb9144/", photo: "images/bora.jpg" },
+                { name: "Mr. D. Anand Kumar", position: "Coordinator", email: "anand.kumar@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/d-anand-kumar-474b3434a/", photo: "images/ananad1.jpg" },
+                { name: "Mr. Vinay Chakravarthy Addanki", position: "President, E-Cell", email: "24070721043@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/vinayaddanki/", photo: "images/vinay.jpg" },
+                { name: "Mr. Sujay Indupuru", position: "Vice President, E-Cell", email: "24070721040@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/sujay-indupuru-756654312/", photo: "images/sujay.jpg" },
+                { name: "Mr. P Karthik", position: "Logistics & Partnership Head, E-Cell", email: "24070721030@sithyd.siu.edu.in", linkedin: "https://www.linkedin.com/in/karthik-p-7507752bb/", photo: "images/karthik.jpg" },
+                { name: "Mr. Gunda Ravi Partha Sarathi", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "24070724005@sithyd.siu.edu.in", linkedin: "http://linkedin.com/in/ravi-partha-sarathi-gunda/", photo: "images/ravi.jpg" },
+                { name: "Ms. Pendlimadugu Nikitha", position: "Student Engagement & Outreach Coordinator, E-Cell", email: "nikithagoud1720@gmail.com", linkedin: "https://www.linkedin.com/in/pendlimadugu-nikitha-75584a328/", photo: "images/nikitha.jpg" }
             ];
 
             const externalTeam = [
-                { name: "Dr. Sriram Birudavolu", position: "CEO - Cyber Security Centre of Excellence DSCI (A NASSCOM Initiative), Hyderabad External Invite & Advisor (Government of Telangana)", email: "sriram.b@dsci.in", linkedin: "https://www.linkedin.com/in/dr-sriram-birudavolu/", photo: "sriram.jpeg" },
-                { name: "Mr. Bhanu Prakash Reddy Varla", position: "Director - Plural Technology Pvt Ltd External Invite & Business Mentor, Angel Investor", email: "bhanuindia@yahoo.com", linkedin: "https://www.linkedin.com/in/bhanu-prakash-reddy-varla-15850615/", photo: "bhanu.jpeg" },
-                { name: "Mr. Vidyasagar Tejomurtula", position: "Senior Principal Architect, Zelis, Hyderabad External Invite & Technology Mentor", email: "sagarvt@gmail.com", linkedin: "https://www.linkedin.com/in/tvidyasagar/", photo: "Vidyasagar Tejomurtula.jpeg" },
-                { name: "Mr. Pranay Kumar Nalla", position: "Head – Government Innovation & Partnership, Telangana Innovation Cell, Govt. of Telangana External Invite & Advisor (Government of Telangana, Innovation Cell)", email: "prannay.tsic@telangana.gov.in", linkedin: "https://www.linkedin.com/in/prannay-kumar-nalla-ba874b86/", photo: "Pranay Kumar Nalla.jpeg" },
-                { name: "Mr. Vamsi Krishna Jadala", position: "Director, World Trade Center Shamshabad External Invite & Business Mentor", email: "vamshikrishnaj@ieee.org", linkedin: "https://www.linkedin.com/in/vamsikrishnaj/", photo: "Vamsi Krishna Jadala.jpeg" },
-                { name: "Ms. Shravya Mandadi", position: "Founder, WE&SHE Foundations External Invite & Women Entrepreneur", email: "shravyareddymandadi@gmail.com", linkedin: "https://www.linkedin.com/in/shravya-mandadi-01067318b/", photo: "Shravya Mandadi.jpeg" }
+                { name: "Dr. Sriram Birudavolu", position: "CEO - Cyber Security Centre of Excellence DSCI (A NASSCOM Initiative), Hyderabad External Invite & Advisor (Government of Telangana)", email: "sriram.b@dsci.in", linkedin: "https://www.linkedin.com/in/dr-sriram-birudavolu/", photo: "images/sriram.jpeg" },
+                { name: "Mr. Bhanu Prakash Reddy Varla", position: "Director - Plural Technology Pvt Ltd External Invite & Business Mentor, Angel Investor", email: "bhanuindia@yahoo.com", linkedin: "https://www.linkedin.com/in/bhanu-prakash-reddy-varla-15850615/", photo: "images/bhanu.jpeg" },
+                { name: "Mr. Vidyasagar Tejomurtula", position: "Senior Principal Architect, Zelis, Hyderabad External Invite & Technology Mentor", email: "sagarvt@gmail.com", linkedin: "https://www.linkedin.com/in/tvidyasagar/", photo: "images/Vidyasagar Tejomurtula.jpeg" },
+                { name: "Mr. Pranay Kumar Nalla", position: "Head – Government Innovation & Partnership, Telangana Innovation Cell, Govt. of Telangana External Invite & Advisor (Government of Telangana, Innovation Cell)", email: "prannay.tsic@telangana.gov.in", linkedin: "https://www.linkedin.com/in/prannay-kumar-nalla-ba874b86/", photo: "images/Pranay Kumar Nalla.jpeg" },
+                { name: "Mr. Vamsi Krishna Jadala", position: "Director, World Trade Center Shamshabad External Invite & Business Mentor", email: "vamshikrishnaj@ieee.org", linkedin: "https://www.linkedin.com/in/vamsikrishnaj/", photo: "images/Vamsi Krishna Jadala.jpeg" },
+                { name: "Ms. Shravya Mandadi", position: "Founder, WE&SHE Foundations External Invite & Women Entrepreneur", email: "shravyareddymandadi@gmail.com", linkedin: "https://www.linkedin.com/in/shravya-mandadi-01067318b/", photo: "images/Shravya Mandadi.jpeg" }
             ];
 
             // Function to create a team member card with a photo
@@ -932,13 +895,6 @@
                 }
             };
             populateTeam();
-
-            // --- Firestore Real-time Event Management ---
-            // This function is no longer needed since events are now hardcoded based on the brochure.
-            // const renderEvents = () => {
-            //     eventsContainer.innerHTML = '<p class="text-center text-secondary">Events will be added and updated here regularly. Check back soon!</p>';
-            // };
-            // renderEvents();
 
             // Initialize Firebase and set up auth listener for user ID
             const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events | E-Cell SIT-H</title>
+
+    <!-- Bootstrap CSS for responsive design and components -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts - Poppins for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for social media icons (LinkedIn, Email) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Three.js Library for the interactive 3D background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --brand-cyan: #22d3ee; /* A vibrant cyan for branding elements */
+            --dark-bg: #0f172a; /* Dark background color */
+            --dark-card: #1e293b; /* Slightly lighter dark for cards and sections */
+        }
+
+        /* Smooth scroll behavior for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Base body styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e5e7eb; /* Light text color for contrast */
+            position: relative; /* Required for Bootstrap Scrollspy to work correctly */
+        }
+
+        /* Styling for the 3D background canvas */
+        #bg-canvas {
+            position: fixed; /* Fixed position to cover the entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10; /* Send to background */
+        }
+
+        /* Navbar styling with transparency and blur effect */
+        .navbar {
+            background-color: rgba(30, 41, 59, 0.8); /* Semi-transparent background */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+        }
+
+        /* Style for the active nav link, controlled by Bootstrap Scrollspy */
+        .navbar-nav .nav-link.active {
+            color: var(--brand-cyan) !important; /* Highlight active link with brand color */
+            font-weight: 700; /* Bold text for active link */
+        }
+
+        /* Add transition to nav links for a smoother hover effect */
+        .navbar-nav .nav-link {
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #67e8f9 !important; /* Lighter cyan on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Navbar logo styling */
+        .navbar-brand .logo-icon {
+            margin-right: 0.5rem;
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .navbar-brand .logo-icon svg {
+            fill: var(--brand-cyan);
+        }
+
+        /* General content section padding */
+        .content-section {
+            padding: 6rem 0; /* Ample vertical padding */
+            overflow: hidden; /* Important for animation to prevent content from showing prematurely */
+        }
+        
+        /* Specific padding for the top of the events page to account for the fixed navbar */
+        .events-page-section {
+            padding-top: 8rem;
+        }
+
+        /* Background color for dark cards/sections */
+        .bg-dark-card {
+            background-color: var(--dark-card);
+        }
+
+        /* Text color for brand elements */
+        .text-brand-cyan {
+            color: var(--brand-cyan);
+        }
+        
+        /* Styles for on-scroll fade-in animations */
+        .animate-on-scroll {
+            opacity: 0; /* Start invisible */
+            transform: translateY(40px); /* Start slightly below final position */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth transition */
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move to final position */
+        }
+        
+        /* Styling for event cards and images */
+        .event-card {
+            background-color: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .event-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-image-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .event-card:hover .event-image {
+            transform: scale(1.05);
+        }
+
+        .event-card .event-title {
+            font-size: 1.5rem;
+            color: var(--brand-cyan);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .speaker-name {
+            color: #e5e7eb;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .event-card:hover .event-title {
+            color: #99f6e4;
+        }
+
+        .event-card .event-description {
+            margin-top: 1rem;
+            color: #e5e7eb;
+            flex-grow: 1;
+        }
+
+        /* Event Details Modal Overlay */
+        .event-details-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+            overflow-y: auto;
+            color: #e5e7eb;
+            clip-path: circle(0% at 50% 125px);
+            transition: clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            pointer-events: none;
+        }
+
+        .event-card:hover .event-details-modal,
+        .event-card.active .event-details-modal {
+            clip-path: circle(150% at 50% 125px);
+            pointer-events: auto;
+        }
+        
+        .modal-content-wrapper {
+            padding: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+        }
+
+        .event-card:hover .modal-content-wrapper,
+        .event-card.active .modal-content-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .modal-main-image {
+            width: 100%;
+            height: 250px;
+            object-fit: contain; /* Changed from cover */
+            background-color: #000; /* Added background for letterboxing */
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        .event-details-modal h4 {
+            color: var(--brand-cyan);
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-details-modal .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .event-details-modal .gallery img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+        }
+        
+        .event-details-modal ul {
+            padding-left: 1.25rem;
+        }
+        
+        .event-details-modal blockquote {
+            font-size: 0.9rem;
+            border-left: 3px solid var(--brand-cyan);
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .event-details-modal .student-name {
+            font-style: italic;
+            text-align: right;
+            opacity: 0.8;
+        }
+
+        /* "Go to Top" button styling */
+        #goToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--brand-cyan);
+            color: var(--dark-bg);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 99;
+        }
+
+        #goToTopBtn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(34, 211, 238, 0.5);
+        }
+
+        #goToTopBtn.show {
+            opacity: 1;
+        }
+        
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 767.98px) {
+            .display-4 {
+                font-size: 2.5rem; /* Smaller heading on mobile */
+            }
+            .lead {
+                font-size: 1rem; /* Smaller lead text on mobile */
+            }
+            #goToTopBtn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation Bar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" id="navbarNav">
+        <div class="container">
+            <!-- Brand Logo/Name -->
+            <a class="navbar-brand fs-4 fw-bold" href="index.html#home">
+                <!-- Logo SVG -->
+                <span class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L6 8h3v4h6V8h3l-6-6zM4 14v2h16v-2H4zM4 18v2h16v-2H4z"/>
+                    </svg>
+                </span>
+                E-Cell <span class="text-brand-cyan">SIT-H</span>
+            </a>
+            <!-- Toggler button for mobile navigation -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="main-nav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#vision">Vision</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#get-involved">Initiatives</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="events.html">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#policy">Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#team">Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- This canvas element is dedicated to the Three.js 3D background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <main>
+        <!-- Events Section -->
+        <section id="events-page" class="content-section events-page-section">
+            <div class="container">
+                <div class="text-center mb-5 animate-on-scroll">
+                    <h2 class="display-5 fw-bold text-white">Events & Highlights</h2>
+                    <p class="lead text-secondary mt-3">A showcase of our activities that fuel the entrepreneurial spirit.</p>
+                </div>
+                
+                <!-- Events will be dynamically generated here -->
+                <div id="events-container" class="row g-4">
+                    <!-- Event cards will be injected by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Go To Top Button -->
+    <button id="goToTopBtn" class="d-none d-md-flex"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Footer Section -->
+    <footer class="py-5 border-top border-secondary bg-dark-card">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-center text-md-start mb-4 mb-md-0">
+                    <p class="text-secondary mb-1">Symbiosis Institute of Technology, Hyderabad</p>
+                    <p class="text-secondary small">Survey Number 292, Off Bangalore Highway, Rangareddy Dist, Hyderabad, Telangana - 509217</p>
+                    <p class="mt-3 text-secondary small">&copy; 2025 E-Cell, SIT Hyderabad. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <!-- Social Media Icons -->
+                    <div class="d-flex justify-content-center justify-content-md-end mt-3">
+                        <!-- LinkedIn Icon -->
+                        <a href="https://www.linkedin.com/in/symbiosis-institute-of-technology-hyderabad/" target="_blank" class="text-secondary social-icon mx-1" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
+                        <!-- Instagram Icon -->
+                        <a href="https://www.instagram.com/symbiosis_sit_hyderabad/" target="_blank" class="text-secondary social-icon mx-1" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript Bundle (includes Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const eventsContainer = document.getElementById('events-container');
+            const goToTopBtn = document.getElementById('goToTopBtn');
+
+            const eventsData = [
+                {
+                    id: 'thub-visit',
+                    title: 'T-HUB Visit',
+                    description: 'Students visited T-Hub Hyderabad, one of India\'s leading startup incubators, gaining firsthand exposure to the startup world.',
+                    image: 'images/thub.jpg',
+                    details: {
+                        fullDescription: 'Our students had an immersive experience at T-Hub, engaging with innovative startups and learning about the lifecycle of a tech venture from ideation to market entry. The visit included a guided tour of the facilities and a Q&A session with resident entrepreneurs.',
+                        gallery: ['https://placehold.co/400x300/1e293b/FFFFFF?text=Gallery+1', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Gallery+2', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Gallery+3'],
+                        learnings: ['Understanding the startup ecosystem.', 'Networking with entrepreneurs.', 'The importance of a collaborative workspace.'],
+                        testimonials: [{ quote: '"The energy at T-Hub was incredible! It was inspiring to see so many ideas come to life."', studentName: 'Priya Sharma, 2nd Year CSE' }]
+                    }
+                },
+                {
+                    id: 'icassp-forum',
+                    title: 'ICASSP Entrepreneurship Forum',
+                    description: 'The team attended the ICASSP Entrepreneurship Forum, a platform that connects innovators and industry leaders.',
+                    image: 'images/icassp.jpg',
+                    details: {
+                        fullDescription: 'Participation in the ICASSP Entrepreneurship Forum provided our members with insights into the cutting-edge intersection of signal processing and entrepreneurship. The event featured high-profile speakers, startup pitches, and valuable networking opportunities.',
+                        gallery: ['https://placehold.co/400x300/1e293b/FFFFFF?text=Forum+Pic+1', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Forum+Pic+2'],
+                        learnings: ['Latest trends in tech entrepreneurship.', 'Effective pitching strategies.', 'Connecting with industry leaders.'],
+                        testimonials: [{ quote: '"A fantastic platform to understand how academic research translates into business opportunities."', studentName: 'Rajesh Kumar, 3rd Year ECE' }]
+                    }
+                },
+                {
+                    id: 'microsoft-day',
+                    title: 'Microsoft Global Fabric Day',
+                    description: 'E-Cell members visited the Microsoft Office in Hyderabad, gaining insights into the company\'s innovation and culture.',
+                    image: 'images/microsoft.jpg',
+                    details: {
+                        fullDescription: 'This visit to Microsoft\'s Hyderabad campus was an eye-opener. Students learned about the corporate innovation culture, product development cycles, and the technologies powering Microsoft\'s global infrastructure. It was a valuable experience bridging academic learning with industry practices.',
+                        gallery: ['https://placehold.co/400x300/1e293b/FFFFFF?text=MSFT+1', 'https://placehold.co/400x300/1e293b/FFFFFF?text=MSFT+2', 'https://placehold.co/400x300/1e293b/FFFFFF?text=MSFT+3'],
+                        learnings: ['Corporate innovation strategies.', 'The role of AI in modern software.', 'Career opportunities at a tech giant.'],
+                        testimonials: [{ quote: '"Seeing the scale of operations at Microsoft was awe-inspiring. It motivated me to aim higher."', studentName: 'Anjali Singh, 2nd Year IT' }]
+                    }
+                },
+                {
+                    id: 'ahmed-tewfik-session',
+                    title: 'Session with Ahmed Tewfik',
+                    description: 'An exclusive session with Ahmed Tewfik, Machine Learning Director at Apple, sharing deep insights into AI and machine learning.',
+                    image: 'images/apple.jpg',
+                    speaker: 'Ahmed Tewfik',
+                    details: {
+                        fullDescription: 'Members had the unique opportunity to interact with a leader from one of the world\'s most innovative companies. Ahmed Tewfik discussed the future of AI, the ethical considerations in machine learning, and offered career advice for students aspiring to work in the field.',
+                        gallery: [],
+                        learnings: ['Future trends in AI/ML.', 'Career pathways in big tech.', 'Importance of ethics in technology.'],
+                        testimonials: [{ quote: '"His insights on AI were profound. It was a privilege to learn from someone at the forefront of the industry."', studentName: 'Vikram Reddy, 4th Year AI&ML' }]
+                    }
+                },
+                {
+                    id: 'ideathon-1',
+                    title: 'IDEATHON 1.0',
+                    description: 'IDEATHON 1.0 was a flagship event for students to pitch their innovative startup ideas to a panel of mentors and experts.',
+                    image: 'images/innovation.jpg',
+                    details: {
+                        fullDescription: 'Our first-ever Ideathon was a massive success, with dozens of teams presenting their groundbreaking ideas. The event provided a platform for students to receive constructive feedback, refine their concepts, and gain confidence in their entrepreneurial abilities.',
+                        gallery: ['https://placehold.co/400x300/1e293b/FFFFFF?text=Pitch+1', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Judging', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Winners'],
+                        learnings: ['How to structure a business pitch.', 'Validating a startup idea.', 'Receiving and implementing feedback.'],
+                        testimonials: [{ quote: '"The feedback from the judges was invaluable. It completely changed how we looked at our business model."', studentName: 'Sneha Patel, Winner' }]
+                    }
+                },
+                {
+                    id: 'shravya-mandadi-talk',
+                    title: 'Breaking Barriers, Building Bridges',
+                    description: 'A powerful talk by Shravya Mandadi, Founder of WE & SHE, on the importance of gender equity in the entrepreneurial landscape.',
+                    image: 'images/talk 1.png',
+                    speaker: 'Shravya Mandadi',
+                    details: {
+                        fullDescription: 'Shravya Mandadi delivered an inspiring and thought-provoking session on fostering inclusivity and breaking down barriers for women in entrepreneurship. Her personal stories and practical advice resonated deeply with the audience, encouraging a more equitable approach to building startups.',
+                        gallery: ['https://placehold.co/400x300/1e293b/FFFFFF?text=Audience', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Q&A'],
+                        learnings: ['The value of diverse teams.', 'Strategies for inclusive leadership.', 'Overcoming gender-specific challenges in business.'],
+                        testimonials: [{ quote: '"Her session was incredibly empowering. It\'s so important to have these conversations."', studentName: 'Aisha Khan, 1st Year BBA' }]
+                    }
+                },
+                {
+                    id: 'ui-ux-workshop',
+                    title: 'Hands-on UI/UX Design Workshop',
+                    description: 'A two-day, hands-on workshop led by Sai Yashwant Tavva, an Angular Developer at Drucare, focusing on practical design skills.',
+                    image: 'images/talk 2.png',
+                    speaker: 'Sai Yashwant Tavva',
+                    details: {
+                        fullDescription: 'This intensive workshop covered the fundamentals of UI/UX design, from wireframing and prototyping to user testing. Participants worked on a project from scratch, applying design thinking principles to create a user-friendly digital interface. It was a highly practical and skill-building event.',
+                        gallery: ['https://placehold.co/400x300/1e293b/FFFFFF?text=Prototyping', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Collaboration', 'https://placehold.co/400x300/1e293b/FFFFFF?text=Final+Designs'],
+                        learnings: ['The full design thinking process.', 'Using modern design tools like Figma.', 'Principles of user-centered design.'],
+                        testimonials: [{ quote: '"I learned more in these two days than in months of online courses. The hands-on approach was perfect."', studentName: 'Amit Desai, 3rd Year CSE' }]
+                    }
+                },
+                {
+                    id: 'v2x-talk',
+                    title: 'The Future of Connected Vehicles',
+                    description: 'Anjaneyulu Devarasetty from L&T Technology Services on V2X communication and the future of autonomous vehicles.',
+                    image: 'images/talk 3.png',
+                    speaker: 'Anjaneyulu Devarasetty',
+                    details: {
+                        fullDescription: 'This session delved into the exciting world of V2X (Vehicle-to-Everything) technology. Anjaneyulu Devarasetty explained how connected vehicles will revolutionize transportation, improve safety, and create new business opportunities in the automotive and tech sectors.',
+                        gallery: [],
+                        learnings: ['Fundamentals of V2X technology.', 'Market opportunities in smart transportation.', 'Challenges in implementing autonomous driving.'],
+                        testimonials: [{ quote: '"A fascinating look into the future of mobility. It opened my eyes to a whole new field of innovation."', studentName: 'Rohan Gupta, 4th Year Mechanical' }]
+                    }
+                },
+                {
+                    id: 'sustainable-agriculture-talk',
+                    title: 'Sowing Innovation, Harvesting Hope',
+                    description: 'A special session with Shri. M.C.V. Prasad, a distinguished agriculturist and rural entrepreneur, on the role of youth in sustainable agriculture.',
+                    image: 'images/talk 4.png',
+                    speaker: 'Shri. M.C.V. Prasad',
+                    details: {
+                        fullDescription: 'Shri. M.C.V. Prasad shared his inspiring journey from a traditional farmer to a rural entrepreneur, emphasizing how technology and innovative practices can transform agriculture. He urged students to look for opportunities to create sustainable solutions for rural India.',
+                        gallery: [],
+                        learnings: ['Application of tech in agriculture.', 'Understanding rural entrepreneurship.', 'Importance of sustainable farming practices.'],
+                        testimonials: [{ quote: '"It was eye-opening to see how much potential for innovation there is in the agricultural sector."', studentName: 'Prakash Rao, 2nd Year Civil' }]
+                    }
+                },
+                {
+                    id: 'creating-solutions-talk',
+                    title: 'Creating Solutions, Not Seeking Jobs',
+                    description: 'Mr. Sri Charan Lakkaraju, a Forbes 30 Under 30 entrepreneur, inspired students to adopt a problem-solving mindset.',
+                    image: 'images/talk 5.png',
+                    speaker: 'Mr. Sri Charan Lakkaraju',
+                    details: {
+                        fullDescription: 'In a high-energy session, Sri Charan Lakkaraju challenged students to shift their perspective from being job seekers to becoming job creators. He shared his own entrepreneurial journey and provided a framework for identifying problems and building viable business solutions around them.',
+                        gallery: [],
+                        learnings: ['Identifying market gaps.', 'The lean startup methodology.', 'Building a personal brand as an entrepreneur.'],
+                        testimonials: [{ quote: '"This talk completely changed my career goals. I\'m now focused on building something of my own."', studentName: 'Meera Iyer, 3rd Year IT' }]
+                    }
+                },
+                {
+                    id: 'beyond-resume-talk',
+                    title: 'Think Beyond the Resume',
+                    description: 'Mr. Ganesh Anabattula, Deputy Manager at Narwal, on crafting solutions rather than just careers.',
+                    image: 'images/talk 6.png',
+                    speaker: 'Mr. Ganesh Anabattula',
+                    details: {
+                        fullDescription: 'Mr. Ganesh Anabattula argued that a resume is a history of the past, while a portfolio of projects and solutions is a promise of the future. He guided students on how to build a compelling portfolio that showcases their problem-solving skills and makes them stand out.',
+                        gallery: [],
+                        learnings: ['The power of project-based learning.', 'How to document and present your work.', 'Skills that matter more than credentials.'],
+                        testimonials: [{ quote: '"I\'m now motivated to start building projects outside of my coursework to showcase my abilities."', studentName: 'Aditya Verma, 2nd Year CSE' }]
+                    }
+                },
+                {
+                    id: 'tech-career-path-talk',
+                    title: 'Mapping Your Career Path in Tech',
+                    description: 'Dr. Ranga Rao Venkatesha Prasad from Delft University of Technology provided a roadmap for students to navigate their careers in tech.',
+                    image: 'images/talk 7.png',
+                    speaker: 'Dr. Ranga Rao Venkatesha Prasad',
+                    details: {
+                        fullDescription: 'Drawing from his extensive academic and research experience, Dr. Prasad provided a strategic overview of the tech industry. He discussed various career tracks, the importance of specialization vs. generalization, and how to stay relevant in a rapidly evolving field.',
+                        gallery: [],
+                        learnings: ['Navigating different tech roles (e.g., developer, researcher, product manager).', 'The importance of continuous learning.', 'Building a global career in technology.'],
+                        testimonials: [{ quote: '"The session provided a clear and structured way to think about my future in the tech industry. Incredibly helpful!"', studentName: 'Fatima Sheikh, 4th Year ECE' }]
+                    }
+                }
+            ];
+
+            const renderEvents = () => {
+                if (!eventsContainer) return;
+                let eventsHTML = '';
+                eventsData.forEach((event, index) => {
+                    eventsHTML += `
+                        <div class="col-lg-6 d-flex align-items-stretch animate-on-scroll" style="transition-delay: ${index * 50}ms;">
+                            <div class="event-card" data-event-id="${event.id}">
+                                <div class="event-image-container">
+                                    <img src="${event.image}" alt="${event.title}" class="event-image">
+                                </div>
+                                <div class="event-card-content">
+                                    <h3 class="event-title">${event.title}</h3>
+                                    ${event.speaker ? `<p class="speaker-name">Speaker: ${event.speaker}</p>` : ''}
+                                    <p class="event-description">${event.description}</p>
+                                </div>
+                                <div class="event-details-modal">
+                                    <button class="modal-close-btn">&times;</button>
+                                    <img src="${event.image}" alt="${event.title}" class="modal-main-image">
+                                    <div class="modal-content-wrapper">
+                                        <h3 class="event-title">${event.title}</h3>
+                                        ${event.speaker ? `<p class="speaker-name">Speaker: ${event.speaker}</p>` : ''}
+                                        <h4>About the Event</h4>
+                                        <p>${event.details.fullDescription}</p>
+                                        
+                                        ${event.details.gallery.length > 0 ? `
+                                        <h4>Gallery</h4>
+                                        <div class="gallery">
+                                            ${event.details.gallery.map(img => `<img src="${img}" alt="Event gallery image">`).join('')}
+                                        </div>` : ''}
+                                        
+                                        <h4>Key Learnings</h4>
+                                        <ul>
+                                            ${event.details.learnings.map(item => `<li>${item}</li>`).join('')}
+                                        </ul>
+                                        
+                                        ${event.details.testimonials.length > 0 ? `
+                                        <h4>Student Experience</h4>
+                                        ${event.details.testimonials.map(t => `
+                                            <blockquote>
+                                                <p>${t.quote}</p>
+                                                <footer class="student-name">- ${t.studentName}</footer>
+                                            </blockquote>
+                                        `).join('')}` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                eventsContainer.innerHTML = eventsHTML;
+            };
+
+            renderEvents();
+
+            // --- On-Scroll Fade-In Animation ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach(el => observer.observe(el));
+
+            // --- Event Card Click/Tap Logic ---
+            eventsContainer.addEventListener('click', (e) => {
+                const card = e.target.closest('.event-card');
+                if (!card) return;
+
+                // Logic for close button
+                if (e.target.classList.contains('modal-close-btn')) {
+                    card.classList.remove('active');
+                    return;
+                }
+
+                // Logic for mobile tap
+                if (window.innerWidth < 992) {
+                    // Remove 'active' from all other cards
+                    document.querySelectorAll('.event-card.active').forEach(activeCard => {
+                        if (activeCard !== card) {
+                            activeCard.classList.remove('active');
+                        }
+                    });
+                    // Toggle current card
+                    card.classList.toggle('active');
+                }
+            });
+
+            // --- Go To Top Button Logic ---
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    goToTopBtn.classList.add('show');
+                } else {
+                    goToTopBtn.classList.remove('show');
+                }
+            });
+
+            goToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // --- Three.js 3D Background Animation ---
+        window.onload = function() {
+            const canvas = document.getElementById('bg-canvas');
+            if (!canvas) {
+                console.error("Canvas element not found.");
+                return;
+            }
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 7000;
+            const posArray = new Float32Array(particlesCount * 3);
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 20;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x22d3ee,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                depthWrite: false
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 5;
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+
+            const clock = new THREE.Clock();
+            const animate = () => {
+                requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
+                particlesMesh.rotation.y = -0.05 * elapsedTime;
+                const targetX = (mouseX / window.innerWidth) * 2 - 1;
+                const targetY = -(mouseY / window.innerHeight) * 2 + 1;
+                camera.position.x += ( targetX - camera.position.x ) * 0.05;
+                camera.position.y += ( targetY - camera.position.y ) * 0.05;
+                camera.lookAt(scene.position);
+                renderer.render(scene, camera);
+            };
+            
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+        };
+    </script>
+</body>
+</html>
